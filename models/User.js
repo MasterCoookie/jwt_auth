@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
+//password hashing 
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -18,6 +20,16 @@ const userSchema = new mongoose.Schema({
         minlength: [6, 'Your password has to be at least 6 characters long']
     }
 });
+
+// mongoose hooks. They fire afer a certain event happens
+// .post afer event, .pre b4 it
+// conviniently, we have access to the data in this obj
+userSchema.pre('save', async function(next) {
+    // hashing password
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+})
 
 const User = mongoose.model('user', userSchema);
 
