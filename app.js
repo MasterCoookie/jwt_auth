@@ -26,24 +26,24 @@ app.get('/smoothies', (req, res) => res.render('smoothies'));
 app.use(authRoutes);
 
 //Cookies
-app.get('/set-cookies', (req, res) => {
+// app.get('/set-cookies', (req, res) => {
 
-  //res.setHeader('Set-Cookie', 'newUser=true');
+//   //res.setHeader('Set-Cookie', 'newUser=true');
 
-  //name, valapp.get('/set-cookies', (req, res) => {
+//   //name, valapp.get('/set-cookies', (req, res) => {
 
-  // 3rd param is options object
-  res.cookie('newUser', false, { maxAge: 1000 * 3600, httpOnly: true });
+//   // 3rd param is options object
+//   res.cookie('newUser', false, { maxAge: 1000 * 3600, httpOnly: true });
 
-  res.send('Cookie sent!');
+//   res.send('Cookie sent!');
 
-});
+// });
 
-app.get('/read-cookies', (req, res) => {
+// app.get('/read-cookies', (req, res) => {
 
-  const cookies = req.cookies;
-  console.log(cookies);
+//   const cookies = req.cookies;
+//   console.log(cookies);
 
-  res.json(cookies);
+//   res.json(cookies);
 
-});
+// });
