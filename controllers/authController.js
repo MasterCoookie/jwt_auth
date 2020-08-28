@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const secret = require('./secret');
+const secret = require('../secret');
 
 // errors handler
 
@@ -53,6 +53,7 @@ const signup_post = async (req, res) => {
 
     try {
         const user = await User.create({ email, password });
+        // login after register
         const token = createToken(user._id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(201).json({ user: user._id });
@@ -67,6 +68,7 @@ const login_post = async (req, res) => {
 
     try {
         const user = await User.login(email, password);
+        // creating token and saving it as a cookie
         const token = createToken(user._id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(200).json({ user: user._id });
