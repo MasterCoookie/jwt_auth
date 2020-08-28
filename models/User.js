@@ -33,11 +33,10 @@ userSchema.pre('save', async function(next) {
 
 // static method to login user
 userSchema.statics.login = async function(email, password) {
-    console.log(email, password);
     const user = await this.findOne({ email });
     if (user) {
         // password compareson
-        const auth = bcrypt.compare(password, user.password);
+        const auth = await bcrypt.compare(password, user.password);
         if (auth) {
             return user;
         }

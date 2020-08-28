@@ -7,9 +7,19 @@ const secret = require('./secret');
 const handleErrors = (err) => {
     let error = { email: '', password: '' };
 
+    //incorrect email handling
+    if (err.message === 'Incorrect email') {
+        error.email = 'That email is not registered!';
+    }
+
+    //incorrect pwd handling
+    if (err.message === 'Incorrect password') {
+        error.password = 'Incorrect password!';
+    }
+
     //duplicates error code, has to be handled separately
     if (err.code === 11000) {
-        error.email = 'email already registered';
+        error.email = 'Email already registered!';
         return error;
     }
 
@@ -44,7 +54,7 @@ const signup_post = async (req, res) => {
     try {
         const user = await User.create({ email, password });
         const token = createToken(user._id);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(201).json({ user: user._id });
     } catch(err) {
         const errors = handleErrors(err);
@@ -57,10 +67,12 @@ const login_post = async (req, res) => {
 
     try {
         const user = await User.login(email, password);
-        res.status(200).json({ user: user._id })
+        const token = createToken(user._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.status(200).json({ user: user._id });
     } catch(err) {
-        console.log(err);
-        res.status(400).json({})
+        const errors = handleErrors(err);
+        res.status(400).json({ errors })
     }
 }
 
