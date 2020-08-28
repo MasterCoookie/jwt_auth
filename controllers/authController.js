@@ -78,9 +78,16 @@ const login_post = async (req, res) => {
     }
 }
 
+const logout_get = (req, res) => {
+    // cant actually delete a cookie, so we replace it with an empty one and give it 1ms expiery time
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.redirect('/');
+}
+
 module.exports = {
     signup_get,
     login_get,
     signup_post,
-    login_post
+    login_post,
+    logout_get
 }
